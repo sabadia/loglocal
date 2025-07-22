@@ -84,6 +84,5 @@ class LogLocal(LoguruLogger):
         return _instance
 
     @classmethod
-    @property
-    def logger(cls) -> 'LogLocal':
+    def default(cls) -> 'LogLocal':
         return cls.from_config(LogLocalConfig())

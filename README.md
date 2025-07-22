@@ -11,16 +11,14 @@
 - File rotation, retention, compression, and serialization
 
 ## Installation
-
+You can install `loglocal` via pip:
 ```bash
-  # using uv
-uv add loglocal
-```
-```bash
-  # using pip
 pip install loglocal
 ```
-
+Or if you prefer to use `uv` (Universal Virtual Environment):
+```bash
+uv add loglocal
+```
 ## Usage
 
 ```python
