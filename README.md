@@ -26,13 +26,15 @@ from loglocal import logger
 
 logger.info("Hello from loglocal!")
 
+
 @logger.wrap
 def my_function(x, y):
-    return x + y
+  return x + y
+
 
 @logger.wrap
 async def my_async_function(x, y):
-    return x * y
+  return x * y
 ```
 
 ## API Reference
