@@ -1,6 +1,6 @@
 [project]
 name = "loglocal"
-version = "1.0.4"
+version = "1.0.5"
 description = "A Python library for local logging with advanced features"
 readme = "README.md"
 authors = [

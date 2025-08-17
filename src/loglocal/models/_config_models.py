@@ -6,6 +6,7 @@ from opentelemetry.sdk.trace import ReadableSpan, SpanProcessor
 from opentelemetry.trace import TracerProvider
 from pydantic import BaseModel, Field, ConfigDict
 
+
 class LogConfig(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -15,6 +16,7 @@ class LogConfig(BaseModel):
     serialize: bool = Field(default=True)
     enqueue: bool = Field(default=True)
     diagnose: bool = Field(default=False)  # avoid leaking vars in production
+
 
 class LogLocalOptions(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
@@ -30,24 +32,42 @@ class LogLocalOptions(BaseModel):
     patchers: list[Any] = []
     extra: dict[str, Any] = {}
 
+
 class DefaultSpanProcessor(SpanProcessor):
-    def on_start(self, span: ReadableSpan, parent_context: Optional[Context] = None, ):
+    def on_start(
+        self,
+        span: ReadableSpan,
+        parent_context: Optional[Context] = None,
+    ):
         print(f"Span started: {span.name} at {span.start_time}")
 
     def on_end(self, span: ReadableSpan):
-        print(f"Span ended: {span.name} with status {span.status.status_code.name} at {span.end_time}")
+        print(
+            f"Span ended: {span.name} with status {span.status.status_code.name} at {span.end_time}"
+        )
+
 
 class LogLocalTraceOptions(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    service_name: str = Field(default=os.environ.get("LOGLOCAL_TRACE_SERVICE_NAME", "app"))
-    version: Optional[str] = Field(default=os.environ.get("LOGLOCAL_TRACE_VERSION", None))
-    span_processor: Optional[SpanProcessor] = None
-    inst_reg_callable: Optional[Callable[[TracerProvider, ], None]] = Field(
-        default=lambda provider: None,
-        description="Callable to register instruments with the tracer provider."
+    service_name: str = Field(
+        default=os.environ.get("LOGLOCAL_TRACE_SERVICE_NAME", "app")
     )
-
+    version: Optional[str] = Field(
+        default=os.environ.get("LOGLOCAL_TRACE_VERSION", None)
+    )
+    span_processor: Optional[SpanProcessor] = None
+    inst_reg_callable: Optional[
+        Callable[
+            [
+                TracerProvider,
+            ],
+            None,
+        ]
+    ] = Field(
+        default=lambda provider: None,
+        description="Callable to register instruments with the tracer provider.",
+    )
 
 
 class LogLocalConfig(BaseModel):
@@ -56,4 +76,6 @@ class LogLocalConfig(BaseModel):
     trace_opt: LogLocalTraceOptions = LogLocalTraceOptions()
     log_opt: LogLocalOptions = LogLocalOptions()
     log_config: LogConfig = LogConfig()
-    sinks: list[Any] = [] # List of additional sinks to be added to the logger, can be used for custom sinks or handlers.
+    sinks: list[
+        Any
+    ] = []  # List of additional sinks to be added to the logger, can be used for custom sinks or handlers.

@@ -5,12 +5,12 @@ from opentelemetry.sdk.resources import Resource
 from loglocal.models._config_models import LogLocalTraceOptions
 
 
-
-def get_tracer(opts: LogLocalTraceOptions = LogLocalTraceOptions(), set_global_tracer_provider=False) -> Tracer:
+def get_tracer(
+    opts: LogLocalTraceOptions = LogLocalTraceOptions(),
+    set_global_tracer_provider=False,
+) -> Tracer:
     provider = TracerProvider(
-        resource=Resource.create({
-            "service.name": opts.service_name
-        })
+        resource=Resource.create({"service.name": opts.service_name})
     )
     if opts.span_processor:
         provider.add_span_processor(opts.span_processor)
